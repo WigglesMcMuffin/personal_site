@@ -1,0 +1,119 @@
+extends base.jade
+
+block main
+  h1 Sockets
+  .row
+    #chat-box-wrapper.container
+      .row
+        #room-tabs
+          ul.nav.nav-tabs
+          hr
+      .row
+        .col-md-8
+          ul#messages
+        .col-md-4
+          ul#users
+      .row
+        form#input_box.form-inline(action='')
+          .form-group.col-md-5
+            input#m(autocomplete='off', style="width: 100%;")
+          .form-group.col-md-2
+            input#scroll(type='checkbox', checked)
+            label.small(for='scroll') Scroll To Bottom
+          .form-group.col-md-1
+            input.btn(type="button", value="Send")
+
+block stylesheets
+  style.
+    #chat-box-wrapper { border: 1px solid black;}
+    #messages, #users { list-style-type: none; margin: 0; padding: 0; height: 300px; overflow-y: auto;}
+    #users li { padding: 5px 10px; }
+    #users li:nth-child(even) { background: #eee; }
+    #messages li.other { background: #eee; }
+    #messages li.self { background: #F0FFFF; }
+    .small { font-size: small; }
+    #room-tabs ul {
+      padding-top: 1em;
+      padding-left: 1em;
+    }
+
+block scripts
+  script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.min.js')
+  script.
+    $(function(){
+      var socket = io.connect('http://' + document.domain, {path: "/new_site/socket.io"});
+      var current_user = "{{ current_user.username }}";
+      var last_user = '';
+      var final_class = ''
+      var room_list = {'pub room': []};
+      var peeps = '';
+      $('#input_box').submit(function() {
+        socket.emit('chat message', $('#m').val(), current_room);
+        $('#m').val('');
+        return false;
+      });
+      socket.on('chat message', function(user, msg, room) {
+        if(room == current_room) {
+          add_message(user, msg);
+        }
+        room_list[room].push([user, msg]);
+      });
+      socket.on('command response', function(msg) {
+        $('#messages').append($('<li>').text(msg));
+      });
+      socket.on('room update', function(rooms){
+        $.each(rooms, function(_, room){
+          room_list[room] = [];
+          $('ul', '#room-tabs').append($('<li>').attr('data-room', room).append($('<a href="#">').text(room)));
+        });
+        $('li[data-room="pub room"]', '#room-tabs').addClass('active');
+      });
+      socket.on('room change', function(room){
+        $('#messages').html('');
+        $('li', '#room-tabs').removeClass('active');
+        $('li[data-room="'+room+'"]', '#room-tabs').addClass('active');
+        if(!room_list[room]) {
+          room_list[room] = [];
+          $('ul', '#room-tabs').append($('<li>').attr('data-room', room).append($('<a href="#">').text(room)));
+        } else {
+          last_user = '';
+          $.each(room_list[room], function(idx, item) {
+            add_message(item[0], item[1]);
+          });
+        }
+        current_room = room;
+      })
+      socket.on('user joined', function(users) {
+        $('#users').html('');
+        $.each(users, function(idx, user){
+          $('#users').append($('<li id="'+user+'">').text(user));
+        });
+        peeps = users;
+      });
+      socket.on('user left', function(user, room) {
+        $('#'+user).remove();
+        delete room_list[room]
+      });
+      socket.on('room left', function(room) {
+        $('li[data-room="'+room+'"]', '#room-tabs').remove();
+        delete room_list[room]
+      })
+      var add_message = function(user, msg) {
+        final_msg = msg;
+        if(last_user != user) {
+          if(user == current_user) {
+            final_msg = 'You: ' + final_msg;
+            final_class = 'self';
+          } else {
+            final_msg = user + ": " + final_msg;
+            final_class = 'other';
+          }
+        }
+        $('#messages').append($('<li class="'+final_class+'">').text(final_msg));
+        last_user = user;
+        if($('#scroll').prop('checked')) $('#messages').scrollTop($('#messages')[0].scrollHeight);
+      }
+      $('#room-tabs').on("click", 'li', function() {
+        socket.emit('chat message', '/room '+$(this).data('room'), current_room);
+      })
+    });

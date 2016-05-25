@@ -1,0 +1,17 @@
+extends base.jade
+
+block main
+  .container-fluid
+    .row
+      h1 Login Page
+    .row
+      .col-md-6
+        form#login.form(action=url_for('users.login_users'), method='POST')
+          = login_form.hidden_tag()
+          .form-group
+            = login_form.username.label
+            = login_form.username(class='form-control', placeholder="Username")
+          .form-group
+            = login_form.password.label
+            = login_form.password(class='form-control', placeholder="Password")
+          input.btn.btn-success(type="submit", value="Sign in")

@@ -1,0 +1,23 @@
+extends base.jade
+
+block main
+  .container-fluid
+    .row
+      h1 D3 Test page
+    .row
+      .col-md-6
+        p Thingy wingy
+      .col-md-6
+        ul#Properties
+
+
+block scripts
+  script(src='//cdnjs.cloudflare.com/ajax/libs/ramda/0.21.0/ramda.min.js')
+  script(src=url_for('graphs.static', filename='js/utils.js'))
+  script.
+    var lines="#{lines}";
+    var new_arr = R.map(function(x) { return x.split(','); }, lines.split(';'));
+    var object_names = new_arr[0];
+    var new_arr = new_arr.slice(1);
+    var object_list = R.map(function(x){return R.zipObj(object_names, x)}, new_arr);
+    //var unique_values = R.zipObj(Object.keys(object_list[0]), R.map(function(x) { return R.uniq(R.map(get_attr(x), object_list))}, Object.keys(object_list[0])));

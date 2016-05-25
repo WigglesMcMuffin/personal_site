@@ -1,0 +1,23 @@
+extends base.jade
+
+block main
+  .container-fluid
+    .row
+      h1
+        | User:
+        = current_user.username
+      h2
+        | Name:
+        = current_user.name
+    hr
+    .row
+      .col-md-8
+        p
+          | Email:
+          = current_user.email
+      .col-md-4
+        p
+          input.btn.btn-primary(type='button', value='Change password')
+        .btn-group-vertical(role='group')
+          input.btn.btn-warning(type='button', value='Suspend Account')
+          input.btn.btn-danger(type='button', value='Delete Account')

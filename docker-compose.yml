@@ -1,0 +1,45 @@
+version: '2'
+services:
+    db:
+        image: postgres
+        container_name: db
+        networks:
+            - web-dev
+    web:
+        build: .
+        command: gunicorn -c gunicorn_conf.py "flask_app:create_app(debug=True)"
+        # command: python start_server.py
+        container_name: experiment
+        networks:
+            - web-dev
+        volumes:
+            - .:/code
+            - /var/uploads:/uploads
+        depends_on:
+            - db
+    data-store:
+        image: monetdb/monetdb-r-docker
+        container_name: data_store
+        networks:
+            - web-dev
+    redis:
+        image: redis
+        container_name: web_games_redis
+        networks:
+            - web-dev
+    rabbitmq:
+        image: rabbitmq
+        container_name: web_games_rabbitmq
+        networks:
+            - web-dev
+    celery:
+        image: celery
+        container_name: web_games_celery
+        networks:
+            - web-dev
+        depends_on:
+            - rabbitmq
+
+networks:
+    web-dev:
+        external: true

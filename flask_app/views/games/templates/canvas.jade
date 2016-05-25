@@ -1,0 +1,17 @@
+extends base.jade
+
+block main
+  .container-fluid
+    .row
+      h1 Canvas page
+      #c
+
+block stylesheets
+  style.
+    #c {
+      border: 1px solid red;
+    }
+
+block scripts
+  script(src='//cdnjs.cloudflare.com/ajax/libs/phaser/2.4.6/phaser.min.js')
+  script(src=url_for('games.static', filename='js/canvas.js'))
