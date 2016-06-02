@@ -6,7 +6,7 @@ block main
       h1 Login Page
     .row
       .col-md-6
-        form#login.form(action=url_for('users.login_users'), method='POST')
+        form#login.form(method='POST')
           = login_form.hidden_tag()
           .form-group
             = login_form.username.label
@@ -15,3 +15,8 @@ block main
             = login_form.password.label
             = login_form.password(class='form-control', placeholder="Password")
           input.btn.btn-success(type="submit", value="Sign in")
+    .row
+      .col-md-6
+        p
+          small If you haven't created your own account you can&nbsp
+            a(href=url_for('users.register_user')) register here

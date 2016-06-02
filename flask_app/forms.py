@@ -1,12 +1,12 @@
 from flask import flash
 from flask_wtf import Form
 from wtforms.fields import StringField, PasswordField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Length, Required, EqualTo
 from flask_app.models.base import User
 
 class LoginForm(Form):
-  username = StringField('username', validators=[DataRequired()])
-  password = PasswordField('password', validators=[DataRequired()])
+  username = StringField('Username', validators=[DataRequired()])
+  password = PasswordField('Password', validators=[DataRequired()])
 
   def validate(self):
     rv = Form.validate(self)
@@ -30,3 +30,30 @@ class LoginForm(Form):
     else:
       self.user = user
       return True
+
+class RegisterPasswordForm(Form):
+    username = StringField('Username', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired()])
+    password = PasswordField('Password',
+        [
+            Length(min=8),
+            Required(),
+            EqualTo('confirm', message='Passwords must match')
+        ])
+    confirm = PasswordField('Confirm Password')
+
+class ChangePasswordForm(Form):
+    old_password = PasswordField('Old Password')
+    new_password = PasswordField('New Password',
+        [
+            Length(min=8),
+            Required(),
+            EqualTo('confirm', message='New Password must match')
+    ])
+    confirm = PasswordField('Confirm New Password')
+
+
+class ItemForm(Form):
+    item_name = StringField('item_name', validators=[DataRequired()])
+    item_description = StringField('item_description')

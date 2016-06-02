@@ -1,0 +1,13 @@
+extends base.jade
+
+block main
+  .container-fluid
+    .row
+      h1 Unauthorized Access
+    .row
+      if status == 'verified'
+        h2 It would appear your account has been banned or suspended. Sorry about that
+        h3 At some point, there will be a contact admin option for these sorts of things
+      else
+        h2 It doesn't look like you've finished verifying your account yet
+        h3 Make sure to check your email (and spam folder) for a verification email from us

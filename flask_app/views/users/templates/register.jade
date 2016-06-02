@@ -1,0 +1,31 @@
+extends base.jade
+
+block main
+  .container-fluid
+    .row
+      h1 Login Page
+    .row
+      .col-md-6
+        form#login.form(action=url_for('users.register_user'), method='POST')
+          = form.hidden_tag()
+          .form-group
+            = form.name.label
+            = form.name(class='form-control')
+          .form-group
+            = form.email.label
+            = form.email(class='form-control')
+          .form-group
+            = form.username.label
+            = form.username(class='form-control')
+          .form-group
+            = form.password.label
+            = form.password(class='form-control')
+          .form-group
+            = form.confirm.label
+            = form.confirm(class='form-control')
+          input.btn.btn-success(type="submit", value="Sign up")
+    .row
+      .col-md-6
+        p
+          small Already have an account?&nbsp;
+            a(href=url_for('users.login_users')) Login here
