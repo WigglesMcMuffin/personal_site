@@ -51,7 +51,7 @@ html(lang='en')
                       li
                         a(href="#") One more separated link
 
-                if current_user.is_authenticated
+                if current_user.is_authenticated()
                   .navbar-right
                     .navbar-inner
                       a.navbar-text(href=url_for('users.user_page', user_id=current_user.id))= current_user.username
@@ -60,10 +60,12 @@ html(lang='en')
                 else
                   form#login.navbar-form.navbar-right(action=url_for('users.login_users'), method='POST')
                     = login_form.hidden_tag()
-                    = login_form.username.label
-                    = login_form.username(class='form-control', placeholder="Username")
-                    = login_form.password.label
-                    = login_form.password(class='form-control', placeholder="Password")
+                    .form-group
+                      = login_form.username.label
+                      = login_form.username(class='form-control', placeholder="Username")
+                    .form-group
+                      = login_form.password.label
+                      = login_form.password(class='form-control', placeholder="Password")
                     input.btn.btn-success.btn-sm(type="submit", value="Sign in")
           - var messages = get_flashed_messages(with_categories=true)
           if messages
