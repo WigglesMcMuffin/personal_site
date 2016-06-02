@@ -31,7 +31,7 @@ class LoginForm(Form):
       self.user = user
       return True
 
-class RegisterPasswordForm(Form):
+class RegisterForm(Form):
     username = StringField('Username', validators=[DataRequired()])
     name = StringField('Name', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired()])
