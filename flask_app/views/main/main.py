@@ -10,6 +10,6 @@ main_site = Blueprint('main', __name__, template_folder='templates', static_fold
 def main_page():
   return render_template('main.jade', pageTitle='Home Page')
 
-@main_site.route('/new_site')
-def test():
-  return render_template('main.jade', pageTitle='Test Page')
+@main_site.route('/about')
+def about_page():
+  return render_template('about.jade', pageTitle='About Page')

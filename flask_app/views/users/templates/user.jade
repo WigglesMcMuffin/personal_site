@@ -15,8 +15,8 @@ block main
         p
           | Email:
           = current_user.email
-        
-        a.btn.btn-warning(href=url_for('users.quick_verify')) Verify Now
+        if not current_user.is_verified()
+          a.btn.btn-warning(href=url_for('users.quick_verify')) Verify Now
       .col-md-4
         p
           input.btn.btn-primary(type='button', value='Change password')

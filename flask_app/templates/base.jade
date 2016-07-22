@@ -31,21 +31,21 @@ html(lang='en')
               #navbar.navbar-collapse.collapse
                 ul.nav.navbar-nav
                   li
-                    a(href="#about") About
+                    a(href=url_for('main.about_page')) About
                   li
                     a(href="#contact") Contact
                   li.dropdown
-                    a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") Dropdown
+                    a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") Modules
                       span.caret
                     ul.dropdown-menu
                       li
-                        a(href="#") Action
+                        a(href=url_for('sockets.sockets')) Chat Rooms
                       li
-                        a(href="#") Another action
+                        a(href=url_for('users.user_page', user_id=current_user.id)) User Page
                       li
                         a(href="#") Something else here
                       li.divider(role="separator")
-                      li.dropdown-header Nav header
+                      li.dropdown-header In Progress
                       li
                         a(href="#") Separated link
                       li

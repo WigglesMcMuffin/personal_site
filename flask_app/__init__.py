@@ -84,6 +84,7 @@ def create_app(debug=False, testing=False):
 
   @app.errorhandler(403)
   def unauthorized(e):
+    from flask import request
     if current_user.is_authenticated():
       if current_user.is_verified():
         status = 'verified'
@@ -91,7 +92,7 @@ def create_app(debug=False, testing=False):
         status = 'authenticated'
     else:
       flash('Please log in to access this page.')
-      return redirect(url_for('users.login_users'))
+      return redirect(url_for('users.login_users', next=request.full_path))
     return render_template('unauthorized.jade', pageTitle='Unauthorized Access', status=status)
 
   return app

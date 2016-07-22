@@ -40,7 +40,8 @@ def login_users():
     user = form.user
     login_user(user)
     next = request.args.get('next')
-    return redirect(next or url_for('main.main_page'))
+    #TODO: investigate middleware or other to make this redirect cleaner
+    return redirect(request.script_root+next or url_for('main.main_page'))
   else:
     return render_template('login.jade')
 
